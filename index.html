@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Simulation de course</title>
+    <style>
+      .race-track {
+        width: 250px;
+        height: 50px;
+        border: 1px solid black;
+        overflow: hidden;
+        position: relative; /* Ajout pour positionner les voitures correctement */
+      }
+
+      .car {
+        position: absolute;
+        width: 20px;
+        height: 10px;
+        background-color: blue;
+        top: 20px;
+        left: 35px;
+      }
+	.lane1 {
+	  top: 10px;
+	}
+
+	.lane2 {
+	  top: 20px;
+	}
+
+	.lane3 {
+	  top: 30px;
+	}
+
+	.lane4 {
+	  top: 40px;
+	}
+
+    </style>
+  </head>
+
+  <body onload="setupRace()">
+    <div class="race-track">
+      <div class="car" id="car1"></div>
+      <div class="car" id="car2"></div>
+      <div class="car" id="car3"></div>
+      <div class="car" id="car4"></div>
+    </div>
+
+    <button onclick="startRace()">Démarrer la course</button>
+    <button onclick="stopRace()">Arrêter la course</button>
+
+    <script>
+      const FINISH_LINE = 230;
+      const CAR_WIDTH = 20;
+      const CAR_HEIGHT = 10;
+      let cars = Array.from(document.getElementsByClassName("car"));
+      let intervalId;
+
+      function setupRace() {
+		  // Assigner la position initiale à chaque voiture
+		  cars[0].classList.add("lane1");
+		  cars[1].classList.add("lane2");
+		  cars[2].classList.add("lane3");
+		  cars[3].classList.add("lane4");
+		  
+		  cars.forEach(function(car) {
+			car.style.left = "35px";
+		  });
+      }
+
+      function startRace() {
+	    intervalId = setInterval(moveCars, 100);
+      }
+
+      function stopRace() {
+        clearInterval(intervalId);
+      }
+
+      function moveCars() {
+        cars.forEach(function(car) {
+          moveCar(car);
+        });
+      }
+
+	function detectCollision(positions) {
+	  for (let i = 0; i < positions.length; i++) {
+		for (let j = i + 1; j < positions.length; j++) {
+		  const car1 = cars[i];
+		  const car2 = cars[j];
+		  
+		  const leftDiff = Math.abs(positions[i] - positions[j]);
+		  const topDiff = Math.abs(parseInt(car1.style.top) - parseInt(car2.style.top));
+		  
+		  if (leftDiff < CAR_WIDTH && topDiff < CAR_HEIGHT) {
+			return true; // collision détectée
+		  }
+		}
+	  }
+	  return false; // pas de collision détectée
+	}
+
+
+      function moveCar(car) {
+
+        let currentPos = parseInt(car.style.left);
+        //let newPos = currentPos + getRandomInt(0, 10) * (Math.random() < 0.5 ? -1 : 1);
+		//let newPos = currentPos + getRandomInt(1, 8) * (Math.random() < 0.7 ? 1 : -1);
+		//let newPos = currentPos + getRandomInt(1, 8) * (Math.random() < 0.9 ? 1 : -1);
+		let newPos = currentPos + getRandomInt(2, 10) * (Math.random() < 0.8 ? 1 : -1);
+
+        // Vérifier si une collision est détectée ou si la voiture a dépassé la ligne d'arrivée
+        const positions = Array.from(cars).map(car => parseInt(car.style.left));
+        positions[cars.indexOf(car)] = newPos;
+        if (!detectCollision(positions) && newPos <= FINISH_LINE) {
+          car.style.left = newPos + "px";
+			if (newPos >= FINISH_LINE) {
+			  alert(`La voiture ${car.id} a gagné !`);
+			}
+        }
+      }
+
+      function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+      } 
+    </script>
+  </body>
+</html>
