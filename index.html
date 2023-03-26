@@ -48,6 +48,7 @@
 
     <button onclick="startRace()">Démarrer la course</button>
     <button onclick="stopRace()">Arrêter la course</button>
+	<button onclick="resetGame()">Réinitialiser</button>
 
     <script>
       const FINISH_LINE = 230;
@@ -55,6 +56,8 @@
       const CAR_HEIGHT = 10;
       let cars = Array.from(document.getElementsByClassName("car"));
       let intervalId;
+	  let winnerDeclared = false;
+
 
       function setupRace() {
 		  // Assigner la position initiale à chaque voiture
@@ -67,6 +70,12 @@
 			car.style.left = "35px";
 		  });
       }
+	  
+	function declareWinner(car) {
+	  alert(`La voiture ${car.id} a gagné !`);
+	  stopRace();
+	  winnerDeclared = true;
+	}
 
       function startRace() {
 	    intervalId = setInterval(moveCars, 100);
@@ -100,24 +109,29 @@
 	}
 
 
-      function moveCar(car) {
-
-        let currentPos = parseInt(car.style.left);
-        //let newPos = currentPos + getRandomInt(0, 10) * (Math.random() < 0.5 ? -1 : 1);
-		//let newPos = currentPos + getRandomInt(1, 8) * (Math.random() < 0.7 ? 1 : -1);
-		//let newPos = currentPos + getRandomInt(1, 8) * (Math.random() < 0.9 ? 1 : -1);
-		let newPos = currentPos + getRandomInt(2, 10) * (Math.random() < 0.8 ? 1 : -1);
-
-        // Vérifier si une collision est détectée ou si la voiture a dépassé la ligne d'arrivée
-        const positions = Array.from(cars).map(car => parseInt(car.style.left));
-        positions[cars.indexOf(car)] = newPos;
-        if (!detectCollision(positions) && newPos <= FINISH_LINE) {
-          car.style.left = newPos + "px";
-			if (newPos >= FINISH_LINE) {
-			  alert(`La voiture ${car.id} a gagné !`);
+		function moveCars() {
+		  if (!winnerDeclared) {
+			let winner = null;
+			cars.forEach(function(car) {
+			  moveCar(car);
+			  if (parseInt(car.style.left) >= FINISH_LINE && !winner) {
+				winner = car;
+			  }
+			});
+			if (winner) {
+			  declareWinner(winner);
+			  setTimeout(resetGame, 3000); // Attendre 3 secondes avant de réinitialiser le jeu
 			}
-        }
-      }
+		  }
+		}
+
+		function resetGame() {
+		  cars.forEach(function(car) {
+			car.style.left = "115px";
+		  });
+		  winnerDeclared = false;
+		  startRace();
+		}
 
       function getRandomInt(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
