@@ -4,7 +4,7 @@
     <title>Simulation de course</title>
     <style>
       .race-track {
-        width: 250px;
+        width: 300px;
         height: 50px;
         border: 1px solid black;
         overflow: hidden;
@@ -16,22 +16,22 @@
         width: 20px;
         height: 10px;
         background-color: blue;
-        top: 20px;
-        left: 35px;
+        top: 0px;
+        left: 5px;
       }
 	.lane1 {
+	  top: 0px;
+	}
+	.lane2 {
 	  top: 10px;
 	}
-
-	.lane2 {
+	.lane3 {
 	  top: 20px;
 	}
-
-	.lane3 {
+	.lane4 {
 	  top: 30px;
 	}
-
-	.lane4 {
+	.lane5 {
 	  top: 40px;
 	}
 
@@ -44,6 +44,7 @@
       <div class="car" id="car2"></div>
       <div class="car" id="car3"></div>
       <div class="car" id="car4"></div>
+      <div class="car" id="car5"></div>
     </div>
 
     <button onclick="startRace()">Démarrer la course</button>
@@ -52,10 +53,10 @@
 
 
     <script>
-      const FINISH_LINE = 230;
       const CAR_WIDTH = 20;
       const CAR_HEIGHT = 10;
-	  const raceTrackWidth = 250;
+	  const raceTrackWidth = 300;
+      const FINISH_LINE = raceTrackWidth - 20;
       let cars = Array.from(document.getElementsByClassName("car"));
       let intervalId;
 	  let winnerDeclared = false;
@@ -66,9 +67,10 @@
 		  cars[1].classList.add("lane2");
 		  cars[2].classList.add("lane3");
 		  cars[3].classList.add("lane4");
+		  cars[4].classList.add("lane5");
 		  
 		  cars.forEach(function(car) {
-			car.style.left = "35px";
+			car.style.left = "5px";
 		  });
       }
 	  
@@ -117,7 +119,7 @@
 			declareWinner(car);
 			resetCars();
 		  } else {
-			car.style.left = currentLeft + Math.floor(Math.random() * 5) + 'px';
+			car.style.left = currentLeft + Math.floor(Math.random() * 6) - 1 + 'px';
 		  }
 		}
 
@@ -132,23 +134,20 @@
 			});
 			if (winner) {
 			  declareWinner(winner);
-			  setTimeout(resetGame, 3000); // Attendre 3 secondes avant de réinitialiser le jeu
+			  setTimeout(resetGame, 1000); // Attendre 1 seconde avant de réinitialiser le jeu
 			}
 		  }
 		}
 
 		function resetGame() {
 		  cars.forEach(function(car) {
-			car.style.left = "115px";
+			car.style.left = "5px";
 		  });
 		  winnerDeclared = false;
 		  startRace();
 		   document.getElementById("reset-btn").setAttribute("disabled", true);
 		}
 
-      function getRandomInt(min, max) {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-      } 
     </script>
   </body>
 </html>
