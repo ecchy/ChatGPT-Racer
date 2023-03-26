@@ -108,6 +108,15 @@
 	  return false; // pas de collision détectée
 	}
 
+		function moveCar(car) {
+		  var currentLeft = parseInt(car.style.left);
+		  if (currentLeft >= raceTrackWidth - carWidth) {
+			declareWinner(car);
+			resetCars();
+		  } else {
+			car.style.left = currentLeft + Math.floor(Math.random() * 5) + 'px';
+		  }
+		}
 
 		function moveCars() {
 		  if (!winnerDeclared) {
