@@ -54,6 +54,7 @@
       const FINISH_LINE = 230;
       const CAR_WIDTH = 20;
       const CAR_HEIGHT = 10;
+	  const raceTrackWidth = 250;
       let cars = Array.from(document.getElementsByClassName("car"));
       let intervalId;
 	  let winnerDeclared = false;
@@ -110,7 +111,7 @@
 
 		function moveCar(car) {
 		  var currentLeft = parseInt(car.style.left);
-		  if (currentLeft >= raceTrackWidth - carWidth) {
+		  if (currentLeft >= raceTrackWidth - CAR_WIDTH) {
 			declareWinner(car);
 			resetCars();
 		  } else {
