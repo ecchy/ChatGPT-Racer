@@ -48,7 +48,8 @@
 
     <button onclick="startRace()">Démarrer la course</button>
     <button onclick="stopRace()">Arrêter la course</button>
-	<button onclick="resetGame()">Réinitialiser</button>
+	<button id="reset-btn" class="btn" disabled>Réinitialiser</button>
+
 
     <script>
       const FINISH_LINE = 230;
@@ -58,7 +59,6 @@
       let cars = Array.from(document.getElementsByClassName("car"));
       let intervalId;
 	  let winnerDeclared = false;
-
 
       function setupRace() {
 		  // Assigner la position initiale à chaque voiture
@@ -80,6 +80,8 @@
 
       function startRace() {
 	    intervalId = setInterval(moveCars, 100);
+		// Activer le bouton "Réinitialiser"
+		document.getElementById("reset-btn").removeAttribute("disabled");
       }
 
       function stopRace() {
@@ -141,6 +143,7 @@
 		  });
 		  winnerDeclared = false;
 		  startRace();
+		   document.getElementById("reset-btn").setAttribute("disabled", true);
 		}
 
       function getRandomInt(min, max) {
